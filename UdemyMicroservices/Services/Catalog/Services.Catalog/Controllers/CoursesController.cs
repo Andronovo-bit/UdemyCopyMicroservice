@@ -24,6 +24,7 @@ namespace Services.Catalog.Controllers
             _courseService = courseService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
 
@@ -41,7 +42,7 @@ namespace Services.Catalog.Controllers
             return CreateActionResultInstance(response);
         }
 
-
+        [HttpGet]
         [Route("/GetAllByUserId/{userId}")]
         public async Task<IActionResult> GetAllByUserId(string userId)
         {

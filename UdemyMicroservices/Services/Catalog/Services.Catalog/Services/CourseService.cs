@@ -94,7 +94,7 @@ namespace Services.Catalog.Services
             {
                 if (cw.IsCompletedSuccessfully)
                 {
-                    return Response<CourseDto>.Success(_mapper.Map<CourseDto>(newCourse), 204);
+                    return Response<CourseDto>.Success(_mapper.Map<CourseDto>(newCourse), 200);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace Services.Catalog.Services
                         return Response<NoContent>.Success(204);
                     }
 
-                    return Response<NoContent>.Fail("Course not found.",204);
+                    return Response<NoContent>.Fail("Course not found.",404);
 
                 }
                 else
