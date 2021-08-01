@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services.Basket.Dtos;
 using Services.Basket.Services;
 using Shared.Library.ControllerBases;
 using Shared.Library.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services.Basket.Controllers
@@ -36,6 +32,12 @@ namespace Services.Basket.Controllers
             var response = await _basketService.SaveOrUpdate(basketDto);
 
             return CreateActionResultInstance(response);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete (string userId)
+        {
+            return CreateActionResultInstance( await _basketService.Delete(userId));
         }
 
     }
