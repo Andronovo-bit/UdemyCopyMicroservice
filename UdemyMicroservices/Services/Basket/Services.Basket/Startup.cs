@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Services.Basket.Services;
 using Services.Basket.Settings;
 using Shared.Library.Services;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Services.Basket
 {
@@ -23,6 +27,11 @@ namespace Services.Basket
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var requereAuthorizePolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+            
+
             services.AddHttpContextAccessor();
 
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
@@ -41,11 +50,19 @@ namespace Services.Basket
                 return redis;
             });
 
-            services.AddControllers();
+            services.AddControllers(opt => {
+                opt.Filters.Add(new AuthorizeFilter(requereAuthorizePolicy));
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Services.Basket", Version = "v1" });
             });
+
+              services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer( options => {
+                options.Authority=Configuration["IdentityServerURL"];
+                options.Audience= "resource_basket";
+                options.RequireHttpsMetadata = false;
+            }); // Useable for different roles login.
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +76,8 @@ namespace Services.Basket
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
