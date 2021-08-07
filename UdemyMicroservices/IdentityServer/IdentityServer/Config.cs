@@ -18,6 +18,7 @@ namespace IdentityServer
                 new ApiResource("resource_catalog"){Scopes = {"catalog_fullpermission"}},
                 new ApiResource("resource_photo_stock"){Scopes = {"photo_stock_fullpermission"}},
                 new ApiResource("resource_basket"){Scopes = {"basket_fullpermission"}},
+                new ApiResource("resource_discount"){Scopes = {"discount_fullpermission"}},
                 new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
             };
 
@@ -43,6 +44,7 @@ namespace IdentityServer
                 new ApiScope("catalog_fullpermission","Full Access for Catalog API"),
                 new ApiScope("photo_stock_fullpermission","Full Access for Photo Stock API"),
                 new ApiScope("basket_fullpermission","Full Access for Basket API"),
+                new ApiScope("discount_fullpermission","Full Access for Discount API"),
                 new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
 
@@ -79,6 +81,7 @@ namespace IdentityServer
                     AllowedScopes=
                     {
                         "basket_fullpermission",
+                        "discount_fullpermission",
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Address,
                         IdentityServerConstants.StandardScopes.Phone,
