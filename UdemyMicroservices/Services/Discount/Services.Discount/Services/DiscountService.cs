@@ -22,9 +22,9 @@ namespace Services.Discount.Services
             _dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("PostgreSql"));
         }
 
-        public async Task<Response<NoContent>> Delete(int Id)
+        public async Task<Response<NoContent>> Delete(int id)
         {
-            var statusDelete = await _dbConnection.ExecuteAsync("DELETE DROM discount WHERE id=@Id", new { Id = Id });
+            var statusDelete = await _dbConnection.ExecuteAsync("DELETE FROM discount WHERE id=@Id", new { Id = id });
 
             return statusDelete > 0 ? Response<NoContent>.Success(204) : Response<NoContent>.Fail("Discount not found.", 404);
         }
@@ -64,7 +64,7 @@ namespace Services.Discount.Services
 
         public async Task<Response<NoContent>> Save(Models.Discount discount)
         {
-            var saveStatus = await _dbConnection.ExecuteAsync("INSERT INTO discount ('userid,rate,code') VALUES(@UserId,@Rate,@Code)",discount);
+            var saveStatus = await _dbConnection.ExecuteAsync("INSERT INTO discount (UserId,Rate,Code) VALUES(@UserId,@Rate,@Code)",discount);
 
             if(saveStatus > 0)
             {

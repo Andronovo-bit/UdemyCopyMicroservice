@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Services.Discount.Services;
+using Shared.Library.Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -34,6 +36,12 @@ namespace Services.Discount
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Services.Discount", Version = "v1" });
             });
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+            services.AddScoped<IDiscountService, DiscountService>();
+
+
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 
