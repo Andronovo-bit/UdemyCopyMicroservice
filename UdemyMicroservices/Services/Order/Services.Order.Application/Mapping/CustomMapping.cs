@@ -12,7 +12,7 @@ namespace Services.Order.Application.Mapping
         public CustomMapping()
         {
             CreateMap<Domain.OrderAggregate.Order, OrderDto>().ReverseMap();
-            CreateMap<OrderItem, OrderDto>().ReverseMap();
+            CreateMap<OrderItem, OrderItemDto>().ReverseMap();
             CreateMap<Address, AddressDto>().ReverseMap();
         }
     }

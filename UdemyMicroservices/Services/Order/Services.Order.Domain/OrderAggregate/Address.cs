@@ -7,13 +7,12 @@ namespace Services.Order.Domain.OrderAggregate
 {
     public class Address: ValueObject
     {
-        public Address(string province, string district, string street, string zipCode, int myProperty, string line)
+        public Address(string province, string district, string street, string zipCode, string line)
         {
             Province = province;
             District = district;
             Street = street;
             ZipCode = zipCode;
-            MyProperty = myProperty;
             Line = line;
         }
 
@@ -31,8 +30,6 @@ namespace Services.Order.Domain.OrderAggregate
         public string Street { get; private set; }
 
         public string ZipCode { get; private set; }
-
-        public int MyProperty { get; private set; }
 
         public string Line { get; private set; }
 

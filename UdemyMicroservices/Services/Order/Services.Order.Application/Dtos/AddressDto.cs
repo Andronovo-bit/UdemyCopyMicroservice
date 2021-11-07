@@ -14,8 +14,6 @@ namespace Services.Order.Application.Dtos
 
         public string ZipCode { get; set; }
 
-        public int MyProperty { get; set; }
-
         public string Line { get; set; }
     }
 }
