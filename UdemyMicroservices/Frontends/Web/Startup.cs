@@ -1,13 +1,12 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Web.Models;
+using Web.Services.Abstract;
+using Web.Services.Concrete;
 
 namespace Web
 {
@@ -23,8 +22,22 @@ namespace Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddHttpContextAccessor();
+            services.AddHttpClient<IIdentityService,IdentityService>();
+
             services.Configure<ServiceApiSettings>(Configuration.GetSection("ServiceApiSettings"));
             services.Configure<ClientSettings>(Configuration.GetSection("ClientSettings"));
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    opts =>
+                    {
+                        opts.LoginPath = "/Auth/SignIn";
+                        opts.ExpireTimeSpan = System.TimeSpan.FromDays(60);
+                        opts.SlidingExpiration = true;
+                        opts.Cookie.Name = "webclientcookie";
+                    });
 
             services.AddControllersWithViews();
         }
@@ -44,6 +57,7 @@ namespace Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
