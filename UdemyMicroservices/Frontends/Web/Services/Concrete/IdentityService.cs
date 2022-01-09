@@ -58,7 +58,7 @@ namespace Web.Services.Concrete
 
             var passwordTokenRequest = new PasswordTokenRequest
             {
-                ClientId = _clientSettings.WebClientForUser.CliendId,
+                ClientId = _clientSettings.WebClientForUser.ClientId,
                 ClientSecret = _clientSettings.WebClientForUser.ClientSecret,
                 UserName = signinInput.Email,
                 Password = signinInput.Password,
@@ -70,7 +70,7 @@ namespace Web.Services.Concrete
             if (token.IsError)
             {
                 var responseContent = await token.HttpResponse.Content.ReadAsStringAsync();
-                var errorDto = JsonSerializer.Deserialize<ErrorDto>(responseContent,new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
+                var errorDto = JsonSerializer.Deserialize<ErrorDto>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 return Response<bool>.Fail(errorDto.Errors, 400);
             }
