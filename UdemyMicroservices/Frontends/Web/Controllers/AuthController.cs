@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -10,11 +12,11 @@ namespace Web.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly IIdentityService identityService;
+        private readonly IIdentityService _identityService;
 
         public AuthController(IIdentityService identityService)
         {
-            this.identityService = identityService;
+            _identityService = identityService;
         }
 
         public IActionResult SignIn()
@@ -30,7 +32,7 @@ namespace Web.Controllers
 
             }
 
-            var response = await identityService.SignIn(signinInput);
+            var response = await _identityService.SignIn(signinInput);
 
             if (!response.IsSuccessful)
             {
@@ -41,6 +43,13 @@ namespace Web.Controllers
 
             return RedirectToAction(nameof(Index), "Home");
 
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _identityService.RevokeRefreshToken();
+            return RedirectToAction(nameof(HomeController.Index),"Home");
         }
     }
 }
