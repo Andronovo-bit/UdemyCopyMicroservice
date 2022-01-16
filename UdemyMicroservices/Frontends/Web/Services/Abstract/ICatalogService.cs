@@ -11,7 +11,7 @@ namespace Web.Services.Abstract
 
         Task<List<CategoryViewModel>> GetAllCategoryAsync();
 
-        Task<List<CategoryViewModel>> GetAllCourseByUserIdAsync(string userId);
+        Task<List<CourseViewModel>> GetAllCourseByUserIdAsync(string userId);
 
         Task<bool> DeleteCourseAsync(string courseId);
 
