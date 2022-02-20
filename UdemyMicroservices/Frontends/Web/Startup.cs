@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shared.Library.Services;
 using Web.Handler;
 using Web.Models;
 using Web.Services.Abstract;
@@ -24,26 +25,36 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.Configure<ServiceApiSettings>(Configuration.GetSection("ServiceApiSettings"));
+
+            services.Configure<ClientSettings>(Configuration.GetSection("ClientSettings"));
+
             services.AddHttpContextAccessor();
+
+            services.AddAccessTokenManagement();
 
             var serviceApiSettings = Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
 
             services.AddScoped<ResourceOwnerPasswordTokenHandler>();
 
+            services.AddScoped<ClientCredentialTokenHandler>();
+
+            services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+
             services.AddHttpClient<IIdentityService, IdentityService>();
+
+            services.AddHttpClient<IClientCredentialTokenService, ClientCredentialTokenService>();
 
             services.AddHttpClient<ICatalogService, CatalogService>(opt =>
             {
                 opt.BaseAddress = new System.Uri($"{serviceApiSettings.GatewayBaseUri}/{ serviceApiSettings.Catalog.Path }");
-            });
+            }).AddHttpMessageHandler<ClientCredentialTokenHandler>();
 
             services.AddHttpClient<IUserService, UserService>(opt =>
             {
                 opt.BaseAddress = new System.Uri(serviceApiSettings.IdentityBaseUri);
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
-            services.Configure<ServiceApiSettings>(Configuration.GetSection("ServiceApiSettings"));
-            services.Configure<ClientSettings>(Configuration.GetSection("ClientSettings"));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                     CookieAuthenticationDefaults.AuthenticationScheme,
