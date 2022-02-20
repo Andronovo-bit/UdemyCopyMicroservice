@@ -26,11 +26,6 @@ namespace Web.Services.Concrete
 
         }
 
-        public Task<bool> DeleteCourseAsync(string courseId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<List<CategoryViewModel>> GetAllCategoryAsync()
         {
             var response = await _client.GetAsync("categories");
@@ -64,7 +59,7 @@ namespace Web.Services.Concrete
 
         public async Task<CourseViewModel> GetByCourseId(string courseId)
         {
-            var response = await _client.GetAsync("categories/GetById/" + courseId);
+            var response = await _client.GetAsync("courses/" + courseId);
             if (!response.IsSuccessStatusCode) return null;
 
             var resposeSuccess = await response.Content.ReadFromJsonAsync<Response<CourseViewModel>>();
@@ -72,14 +67,14 @@ namespace Web.Services.Concrete
             return resposeSuccess.Data;
         }
 
-        public async Task<bool> UpdateCourseAsync(CourseUpdateInput courseUpdateInput)
+        public async Task<bool> DeleteCourseAsync(string courseId)
         {
-            var response = await _client.DeleteAsync("courses/" + courseUpdateInput);
+            var response = await _client.DeleteAsync("courses/" + courseId);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteCourseAsync(CourseUpdateInput courseUpdateInput)
+        public async Task<bool> UpdateCourseAsync(CourseUpdateInput courseUpdateInput)
         {
             var response = await _client.PutAsJsonAsync<CourseUpdateInput>("courses", courseUpdateInput);
 
