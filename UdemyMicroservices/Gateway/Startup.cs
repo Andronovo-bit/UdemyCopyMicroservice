@@ -28,7 +28,7 @@ namespace Gateway
             services.AddAuthentication().AddJwtBearer("GatewayAuthenticationScheme", opt =>
             {
                 opt.Authority = Configuration["IdentityServerURL"];
-                opt.Audience = "resource_basket";
+                opt.Audience = "resource_gateway";
                 opt.RequireHttpsMetadata = false;
             });
 

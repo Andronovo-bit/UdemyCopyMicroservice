@@ -54,7 +54,7 @@ namespace Web.Services.Concrete
 
         public async Task<List<CourseViewModel>> GetAllCourseByUserIdAsync(string userId)
         {
-            var response = await _client.GetAsync("categories/GetAllByUserId/" + userId);
+            var response = await _client.GetAsync($"courses/GetAllByUserId/{userId}");
             if (!response.IsSuccessStatusCode) return null;
 
             var resposeSuccess = await response.Content.ReadFromJsonAsync<Response<List<CourseViewModel>>>();

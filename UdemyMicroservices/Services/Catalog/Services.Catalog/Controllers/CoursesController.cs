@@ -34,7 +34,7 @@ namespace Services.Catalog.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult>GetById(string Id)
+        public async Task<IActionResult> GetById(string Id)
         {
 
             var response = await _courseService.GetByIdAsync(Id);
@@ -43,7 +43,7 @@ namespace Services.Catalog.Controllers
         }
 
         [HttpGet]
-        [Route("/GetAllByUserId/{userId}")]
+        [Route("/api/[controller]/GetAllByUserId/{userId}")]
         public async Task<IActionResult> GetAllByUserId(string userId)
         {
 
