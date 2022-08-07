@@ -17,34 +17,40 @@ namespace Services.PhotoStock.Controller
     public class PhotosController : CustomBaseController
     {
         [HttpPost]
-        public async Task<IActionResult> PhotoSave(IFormFile photo, CancellationToken cancellationToken){
+        public async Task<IActionResult> PhotoSave(IFormFile photo, CancellationToken cancellationToken)
+        {
 
-            if(photo != null && photo.Length > 0){
-                var path = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot/photos", photo.FileName);
+            if (photo != null && photo.Length > 0)
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos", photo.FileName);
 
-                using(var stream = new FileStream(path,FileMode.Create)){
-                    await photo.CopyToAsync(stream,cancellationToken);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await photo.CopyToAsync(stream, cancellationToken);
                 }
 
-                var returnPath = "photos/" + photo.FileName;
+                var returnPath = photo.FileName;
 
-                PhotoDto photoDto = new() {
+                PhotoDto photoDto = new()
+                {
                     URL = returnPath
                 };
 
-                return CreateActionResultInstance(Response<PhotoDto>.Success(photoDto,200));
+                return CreateActionResultInstance(Response<PhotoDto>.Success(photoDto, 200));
             }
 
-            return CreateActionResultInstance(Response<PhotoDto>.Fail("Photo is emmpty",400));
+            return CreateActionResultInstance(Response<PhotoDto>.Fail("Photo is emmpty", 400));
 
         }
 
         [HttpDelete]
-        public IActionResult PhotoDelete(string photoUrl){
-            var path = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot/photos",photoUrl);
+        public IActionResult PhotoDelete(string photoUrl)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos", photoUrl);
 
-            if(!System.IO.File.Exists(path)){
-                return CreateActionResultInstance(Response<NoContent>.Fail("Photo not found.",404));
+            if (!System.IO.File.Exists(path))
+            {
+                return CreateActionResultInstance(Response<NoContent>.Fail("Photo not found.", 404));
             }
 
             System.IO.File.Delete(path);
@@ -52,5 +58,5 @@ namespace Services.PhotoStock.Controller
             return CreateActionResultInstance(Response<NoContent>.Success(204));
         }
     }
-    
+
 }
