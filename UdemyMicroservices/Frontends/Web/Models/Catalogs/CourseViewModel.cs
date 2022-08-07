@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 
 namespace Web.Models.Catalogs
 {
