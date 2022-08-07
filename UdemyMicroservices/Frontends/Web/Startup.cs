@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.Library.Services;
 using Web.Handler;
+using Web.Helpers;
 using Web.Models;
 using Web.Services.Abstract;
 using Web.Services.Concrete;
@@ -34,6 +35,8 @@ namespace Web
             services.AddAccessTokenManagement();
 
             var serviceApiSettings = Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
+            
+            services.AddSingleton<PhotoHelper>();
 
             services.AddScoped<ResourceOwnerPasswordTokenHandler>();
 
@@ -48,6 +51,11 @@ namespace Web
             services.AddHttpClient<ICatalogService, CatalogService>(opt =>
             {
                 opt.BaseAddress = new System.Uri($"{serviceApiSettings.GatewayBaseUri}/{ serviceApiSettings.Catalog.Path }");
+            }).AddHttpMessageHandler<ClientCredentialTokenHandler>();
+
+            services.AddHttpClient<IPhotoStockService, PhotoStockService>(opt =>
+            {
+                opt.BaseAddress = new System.Uri($"{serviceApiSettings.GatewayBaseUri}/{ serviceApiSettings.PhotoStock.Path }");
             }).AddHttpMessageHandler<ClientCredentialTokenHandler>();
 
             services.AddHttpClient<IUserService, UserService>(opt =>
